@@ -1,0 +1,20 @@
+{
+  "version": "0.0.6",
+  "name": "json-cov-travis",
+  "description": "Json coverage reporter for mocha on travis",
+  "keywords": [
+    "travis",
+    "mocha",
+    "test",
+    "coverage"
+  ],
+  "author": "Alex Seville",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alex-seville/json-cov-travis"
+  },
+  "engines": {
+    "node": ">=0.6"
+  },
+  "main": "index.js"
+}
