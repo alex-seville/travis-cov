@@ -2,10 +2,9 @@
 /**
  * Expose `TrvsCov`.
  */
-
+var fs = require("fs");
 exports = module.exports =  TrvsCov;
-var THRESHOLDVARNAME = "blanketThreshold",
-  covThreshold=50;
+var covThreshold=50;
 /**
  * Initialize a new TrvsCov reporter.
  * Threshold defaults to 50, but you can pass it a custom threshold
@@ -22,15 +21,13 @@ function TrvsCov(runner) {
   runner.on('end', function(){
     var cov = global._$jscoverage || {};
 
-    function hasThresholdVar(element, index, array) {
-      return element.indexOf(THRESHOLDVARNAME) === 0;
+    var path = process.cwd() + '/package.json';
+
+    var exists = fs.existsSync(path);
+    if (exists){
+        covThreshold = JSON.parse(fs.readFileSync(path, 'utf8')).blanketThreshold || covThreshold;
     }
-    var tg = runner._globals.filter(hasThresholdVar);
-    if (tg.length > 0){
-      try{
-        covThreshold = parseFloat(tg[0].replace(THRESHOLDVARNAME,""));
-      }catch(e){}
-    }
+
     for (var filename in cov) {
       var data = cov[filename];
       reportFile(filename, data);
