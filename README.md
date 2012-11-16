@@ -4,4 +4,4 @@ A coverage reporter for [Mocha](http://visionmedia.github.com/mocha/)/[Blanket](
 
 Threshold is specified in the package.json file of the consuming project.
 
-Add the key `"travis-cov-threshold": <number>`.
+Add the key `"travis-cov-threshold": <number>`.  See [Blanket.js's package.json](https://github.com/Migrii/blanket/blob/live/package.json#L42) as an example.
