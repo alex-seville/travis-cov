@@ -1,10 +1,14 @@
 
+var fs = require("fs"),
+    covThreshold=50, //defaults to 50%
+    PACKAGE_KEY = "travis-cov-threshold";
+
 /**
  * Expose `TrvsCov`.
  */
-var fs = require("fs");
+
 exports = module.exports =  TrvsCov;
-var covThreshold=50;
+
 /**
  * Initialize a new TrvsCov reporter.
  * Threshold defaults to 50, but you can pass it a custom threshold
@@ -25,7 +29,7 @@ function TrvsCov(runner) {
 
     var exists = fs.existsSync(path);
     if (exists){
-        covThreshold = JSON.parse(fs.readFileSync(path, 'utf8')).blanketThreshold || covThreshold;
+        covThreshold = JSON.parse(fs.readFileSync(path, 'utf8'))[PACKAGE_KEY] || covThreshold;
     }
 
     for (var filename in cov) {
@@ -57,6 +61,7 @@ function reportFile(filename, data) {
   ret.coverage = ret.hits / ret.sloc * 100;
 
   if (ret.coverage < covThreshold){
+    console.log("Code coverage below threshold: "+ret.coverage+ " < "+covThreshold);
     process.exit(1);
   }
   
