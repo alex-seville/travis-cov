@@ -1,10 +1,5 @@
 
 var fs = require("fs"),
-    options = {
-      threshold: 50, //defaults to 50%
-      global: true,
-      local: false
-    },
     PACKAGE_KEY = "travis-cov",
     THRESHOLD_KEY = "threshold",
     GLOBAL_KEY = "global",
@@ -32,7 +27,8 @@ exports = module.exports =  TrvsCov;
 
 function TrvsCov(runner) {
   runner.on('end', function(){
-    var cov = global._$jscoverage || {};
+    var cov = global._$jscoverage || {},
+      options = {};
 
     var path = process.cwd() + '/package.json';
 
@@ -47,7 +43,7 @@ function TrvsCov(runner) {
           options.local = userOpts[LOCAL_KEY] || options.local;
         }
     }
-    travisCov.check(cov);
+    travisCov.check(cov,options);
   });
 }
 

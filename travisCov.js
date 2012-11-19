@@ -1,6 +1,18 @@
-(typeof exports !== "undefined" ? exports : window).travisCov = (function(){   
+(typeof exports !== "undefined" ? exports : window).travisCov = (function(){
     var main = {
-      check: function(cov){
+      check: function(cov,userOptions){
+        var options = {
+          threshold: 50, //defaults to 50%
+          global: true,
+          local: false
+        };
+
+        if (userOptions){
+          options.threshold = userOptions.threshold || options.threshold;
+          options.threshold = userOptions.global || options.global;
+          options.threshold = userOptions.local || options.local;
+        }
+
         var totals =[];
         for (var filename in cov) {
           var data = cov[filename];
