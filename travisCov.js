@@ -16,7 +16,7 @@
         var totals =[];
         for (var filename in cov) {
           var data = cov[filename];
-          this.reportFile( data);
+          this.reportFile( data,options);
         }
         var totalHits = 0;
         var totalSloc = 0;
@@ -30,7 +30,7 @@
           process.exit(1);
         }
       },
-      reportFile: function( data) {
+      reportFile: function( data,options) {
         var ret = {
           coverage: 0,
           hits: 0,
