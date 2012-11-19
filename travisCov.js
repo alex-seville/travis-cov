@@ -16,7 +16,7 @@
         var totals =[];
         for (var filename in cov) {
           var data = cov[filename];
-          this.reportFile( data,options);
+          totals = this.reportFile( data,options);
         }
         var totalHits = 0;
         var totalSloc = 0;
@@ -25,10 +25,16 @@
           totalSloc += elem[1];
         });
         var globCoverage = totalHits / totalSloc * 100;
-        if (options.global && globCoverage < options.threshold){
+        console.log("global coverage:"+globCoverage);
+        if (options.global && (globCoverage < options.threshold || isNaN(globCoverage))){
           console.log("Code coverage below threshold: "+globCoverage+ " < "+options.threshold);
-          process.exit(1);
+          if (typeof process !== "undefined"){
+            process.exit(1);
+          }
+          return false;
+          
         }
+        return true;
       },
       reportFile: function( data,options) {
         var ret = {
@@ -51,7 +57,10 @@
 
         if (options.local && ret.coverage < options.threshold){
           console.log("Code coverage below threshold: "+ret.coverage+ " < "+options.threshold);
-          process.exit(1);
+          if (typeof process !== "undefined"){
+            process.exit(1);
+          }
+          //need to figure out
         }
         return [ret.hits,ret.sloc];
         
