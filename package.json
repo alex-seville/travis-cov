@@ -1,10 +1,11 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "travis-cov",
-  "description": "Mocha coverage reporter for travis",
+  "description": "Mocha/blanket coverage reporter for travis-ci.",
   "keywords": [
     "travis",
     "mocha",
+    "blanket",
     "test",
     "coverage"
   ],
