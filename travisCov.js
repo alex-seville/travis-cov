@@ -1,6 +1,10 @@
 (typeof exports !== "undefined" ? exports : window).travisCov = (function(){
     var main = {
       check: function(cov,userOptions){
+        if (!cov){
+          return false;
+        }
+        
         var options = {
           threshold: 50, //defaults to 50%
           global: true,
@@ -9,25 +13,28 @@
 
         if (userOptions){
           options.threshold = userOptions.threshold || options.threshold;
-          options.threshold = userOptions.global || options.global;
-          options.threshold = userOptions.local || options.local;
+          options.global = userOptions.global || options.global;
+          options.local = userOptions.local || options.local;
         }
 
         var totals =[];
         for (var filename in cov) {
           var data = cov[filename];
-          totals = this.reportFile( data,options);
+          totals.push(this.reportFile( data,options));
         }
+        
         var totalHits = 0;
         var totalSloc = 0;
         totals.forEach(function(elem){
           totalHits += elem[0];
           totalSloc += elem[1];
         });
-        var globCoverage = totalHits / totalSloc * 100;
-        console.log("global coverage:"+globCoverage);
+        
+        var globCoverage = (totalHits === 0 || totalSloc === 0) ?
+                              0 : totalHits / totalSloc * 100;
+        console.log("Coverage: "+Math.floor(globCoverage)+"%");
         if (options.global && (globCoverage < options.threshold || isNaN(globCoverage))){
-          console.log("Code coverage below threshold: "+globCoverage+ " < "+options.threshold);
+          console.log("Code coverage below threshold: "+Math.floor(globCoverage)+ " < "+options.threshold);
           if (typeof process !== "undefined"){
             process.exit(1);
           }
@@ -56,7 +63,7 @@
         ret.coverage = ret.hits / ret.sloc * 100;
 
         if (options.local && ret.coverage < options.threshold){
-          console.log("Code coverage below threshold: "+ret.coverage+ " < "+options.threshold);
+          console.log("Code coverage below threshold: "+Math.floor(ret.coverage)+ " < "+options.threshold);
           if (typeof process !== "undefined"){
             process.exit(1);
           }
