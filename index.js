@@ -48,6 +48,10 @@ function TrvsCov(runner) {
 
   runner.on('fail', function(test){
     process.stdout.write("Tests failed.\n");
+    if (test.err){
+      process.stdout.write(test.err.message);
+      process.stdout.write(test.err.stack);
+    }
     process.exit(1);
   });
 }
