@@ -46,11 +46,11 @@ function TrvsCov(runner) {
     travisCov.check(cov,options);
   });
 
-  runner.on('fail', function(test){
+  runner.on('fail', function(test,err){
     process.stdout.write("Tests failed.\n");
-    if (test.err){
-      process.stdout.write(test.err.message);
-      process.stdout.write(test.err.stack);
+    if (err){
+      process.stdout.write(err.message);
+      process.stdout.write(err.stack);
     }
     process.exit(1);
   });
