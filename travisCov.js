@@ -40,6 +40,8 @@
           }
           return false;
           
+        }else{
+          console.log("Coverage succeeded.");
         }
         return true;
       },

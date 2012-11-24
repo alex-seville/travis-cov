@@ -100,18 +100,10 @@ function addLogging(threshold) {
 
         QUnit.done(function(result){
            
-            
-            
-                 //console.log('Took ' + result.runtime +  'ms to run ' + result.total + ' tests. ' + result.passed + ' passed, ' + result.failed + ' failed.');
-            
-                if (!window.travisCov.check(window._$blanket,{threshold: threshold})){
-                    result = {failed:1};
-                }else{
-                    console.log("coverage passed.");
-                }
-                window.qunitDone = result;
-           
-            
+            if (!window.travisCov.check(window._$blanket,{threshold: threshold})){
+                result = {failed:1};
+            }
+            window.qunitDone = result;
         });
     }, false );
 }

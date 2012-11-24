@@ -45,5 +45,10 @@ function TrvsCov(runner) {
     }
     travisCov.check(cov,options);
   });
+
+  runner.on('fail', function(test){
+    process.stdout.write("Tests failed.\n");
+    process.exit(1);
+  });
 }
 
