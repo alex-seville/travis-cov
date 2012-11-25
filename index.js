@@ -47,7 +47,7 @@ function TrvsCov(runner) {
   });
 
   runner.on('fail', function(test,err){
-    process.stdout.write("Tests failed.\n");
+    console.log("Tests failed.\n");
     if (err){
       var message = err.message || ''
         , stack = err.stack || message

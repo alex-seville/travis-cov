@@ -6,15 +6,11 @@
         }
         
         var options = {
-          threshold: 50, //defaults to 50%
-          global: true,
-          local: false
+          threshold: 50 //defaults to 50%
         };
 
         if (userOptions){
           options.threshold = userOptions.threshold || options.threshold;
-          options.global = userOptions.global || options.global;
-          options.local = userOptions.local || options.local;
         }
 
         var totals =[];
@@ -33,7 +29,7 @@
         var globCoverage = (totalHits === 0 || totalSloc === 0) ?
                               0 : totalHits / totalSloc * 100;
         console.log("Coverage: "+Math.floor(globCoverage)+"%");
-        if (options.global && (globCoverage < options.threshold || isNaN(globCoverage))){
+        if (globCoverage < options.threshold || isNaN(globCoverage)){
           console.log("Code coverage below threshold: "+Math.floor(globCoverage)+ " < "+options.threshold);
           if (typeof process !== "undefined"){
             process.exit(1);
@@ -64,13 +60,6 @@
         });
         ret.coverage = ret.hits / ret.sloc * 100;
 
-        if (options.local && ret.coverage < options.threshold){
-          console.log("Code coverage below threshold: "+Math.floor(ret.coverage)+ " < "+options.threshold);
-          if (typeof process !== "undefined"){
-            process.exit(1);
-          }
-          //need to figure out
-        }
         return [ret.hits,ret.sloc];
         
       }
