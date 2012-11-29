@@ -61,9 +61,8 @@ function onfinishedTests() {
 }
 
 function addLogging(threshold) {
-    console.log("adding loggingigngigng");
-    if (!DOMbound){
-        console.log("binding dom");
+    
+       
         window.document.addEventListener( "DOMContentLoaded", function() {
             var current_test_assertions = [],
                 DOMbound=true;
@@ -111,5 +110,5 @@ function addLogging(threshold) {
                 window.qunitDone = result;
             });
         }, false );
-    }
+    
 }
