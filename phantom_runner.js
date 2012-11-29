@@ -15,7 +15,8 @@
 /*global phantom:true require:true console:true */
 var url = phantom.args[0],
     threshold = phantom.args[1],
-    page = require('webpage').create();
+    page = require('webpage').create(),
+    DOMbound=false;
 
 // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
 page.onConsoleMessage = function(msg) {
@@ -60,50 +61,55 @@ function onfinishedTests() {
 }
 
 function addLogging(threshold) {
-    window.document.addEventListener( "DOMContentLoaded", function() {
-        var current_test_assertions = [];
+    console.log("adding loggingigngigng");
+    if (!DOMbound){
+        console.log("binding dom");
+        window.document.addEventListener( "DOMContentLoaded", function() {
+            var current_test_assertions = [],
+                DOMbound=true;
 
-        QUnit.testDone(function(result) {
-            var i,
-                name = result.module + ': ' + result.name;
+            QUnit.testDone(function(result) {
+                var i,
+                    name = result.module + ': ' + result.name;
 
-            if (result.failed) {
-                console.log('Assertion Failed: ' + name);
+                if (result.failed) {
+                    console.log('Assertion Failed: ' + name);
 
-                for (i = 0; i < current_test_assertions.length; i++) {
-                    console.log('    ' + current_test_assertions[i]);
-                }
-            }
-
-            current_test_assertions = [];
-        });
-
-        QUnit.log(function(details) {
-            var response;
-
-            if (details.result) {
-                return;
-            }
-
-            response = details.message || '';
-
-            if (typeof details.expected !== 'undefined') {
-                if (response) {
-                    response += ', ';
+                    for (i = 0; i < current_test_assertions.length; i++) {
+                        console.log('    ' + current_test_assertions[i]);
+                    }
                 }
 
-                response += 'expected: ' + details.expected + ', but was: ' + details.actual;
-            }
+                current_test_assertions = [];
+            });
 
-            current_test_assertions.push('Failed assertion: ' + response);
-        });
+            QUnit.log(function(details) {
+                var response;
 
-        QUnit.done(function(result){
-           
-            if (!window.travisCov.check(window._$blanket,{threshold: threshold})){
-                result = {failed:1};
-            }
-            window.qunitDone = result;
-        });
-    }, false );
+                if (details.result) {
+                    return;
+                }
+
+                response = details.message || '';
+
+                if (typeof details.expected !== 'undefined') {
+                    if (response) {
+                        response += ', ';
+                    }
+
+                    response += 'expected: ' + details.expected + ', but was: ' + details.actual;
+                }
+
+                current_test_assertions.push('Failed assertion: ' + response);
+            });
+
+            QUnit.done(function(result){
+               
+                if (!window.travisCov.check(window._$blanket,{threshold: threshold})){
+                    result = {failed:1};
+                }
+                window.qunitDone = result;
+            });
+        }, false );
+    }
 }
