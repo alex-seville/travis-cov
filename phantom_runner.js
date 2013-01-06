@@ -104,7 +104,14 @@ function addLogging(threshold) {
 
             QUnit.done(function(result){
                
-                if (!window.travisCov.check(window._$blanket,{threshold: threshold})){
+                if (result.passed === 0){
+                    console.log("failed: no tests run.");
+                    result.failed=1;
+                }else if (! window._$blanket ){
+                    console.log("failed: no coverage info.");
+                    result = result.failed > 0 ? result : {failed: 1};
+                }else if ( !window.travisCov.check(window._$blanket,{threshold: threshold})){
+                    console.log("failed:"+window._$blanket);
                     result = {failed:1};
                 }
                 window.qunitDone = result;
