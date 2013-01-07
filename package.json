@@ -1,5 +1,5 @@
 {
-  "version": "0.2.3",
+  "version": "0.2.4",
   "name": "travis-cov",
   "description": "Mocha/blanket coverage reporter for travis-ci.",
   "keywords": [
