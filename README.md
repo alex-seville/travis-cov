@@ -10,7 +10,7 @@ Add the key `"travis-cov" to the "scripts" key in your package.json file.  Under
 global: <boolean>,
 local: <boolean>`  
 
-See [Blanket.js's package.json](https://github.com/alex-seville/blanket/blob/live/package.json#L42) as an example.
+See [Blanket.js's package.json](https://github.com/alex-seville/blanket/blob/master/package.json#L42) as an example.
 
 ###usage
 1. `npm install travis-cov`
