@@ -25,25 +25,25 @@ page.onConsoleMessage = function(msg) {
 
 page.onInitialized = function() {
     page.injectJs('travisCov.js');
-    
+
     page.evaluate(addLogging,threshold);
-    
+
 };
 page.open(url, function(status){
     if (status !== "success") {
         console.log("Unable to access network: " + status);
         phantom.exit(1);
     } else {
-        
-        
+
+
         var interval = setInterval(function() {
             if (finished()) {
                 clearInterval(interval);
                 onfinishedTests();
             }
         }, 500);
-    
-        
+
+
     }
 });
 
@@ -61,8 +61,8 @@ function onfinishedTests() {
 }
 
 function addLogging(threshold) {
-    
-       
+
+
         window.document.addEventListener( "DOMContentLoaded", function() {
             var current_test_assertions = [],
                 DOMbound=true;
@@ -103,19 +103,19 @@ function addLogging(threshold) {
             });
 
             QUnit.done(function(result){
-               
+
                 if (result.passed === 0){
                     console.log("failed: no tests run.");
                     result.failed=1;
-                }else if (! window._$blanket ){
+                }else if (!  (window._$blanket || window._$jscoverage) ){
                     console.log("failed: no coverage info.");
                     result = result.failed > 0 ? result : {failed: 1};
-                }else if ( !window.travisCov.check(window._$blanket,{threshold: threshold})){
-                    console.log("failed:"+window._$blanket);
+                }else if ( !window.travisCov.check( (window._$blanket || window._$jscoverage),{threshold: threshold})){
+                    console.log("failed:"+ (window._$blanket || window._$jscoverage));
                     result = {failed:1};
                 }
                 window.qunitDone = result;
             });
         }, false );
-    
+
 }

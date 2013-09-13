@@ -12,7 +12,7 @@ PhantomJasmineRunner = (function() {
   PhantomJasmineRunner.prototype.get_status = function() {
     return this.page.evaluate(function(threshold) {
       if (window.jasmine_phantom_reporter.status === "success"){
-        if (!window.travisCov.check(window._$blanket,{threshold: threshold})){
+        if (!window.travisCov.check( (window._$blanket || window._$jscoverage),{threshold: threshold})){
           return "fail";
         }else{
           return "success";
@@ -25,7 +25,7 @@ PhantomJasmineRunner = (function() {
 
   PhantomJasmineRunner.prototype.terminate = function() {
     switch (this.get_status()) {
-      case "success":   
+      case "success":
         return this.exit_func(0);
       case "fail":
         return this.exit_func(1);
@@ -70,7 +70,7 @@ page.open(address, function(status) {
     console.log("can't load the address!");
     phantom.exit(1);
   }
-  
-  
+
+
 });
 

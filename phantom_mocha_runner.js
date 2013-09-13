@@ -23,7 +23,7 @@ page.onConsoleMessage = function(msg) {
 
 page.onInitialized = function() {
     page.injectJs('travisCov.js');
-    
+
 };
 
 page.open(url, function(status){
@@ -53,11 +53,11 @@ function onfinishedTests() {
     var output = page.evaluate(function(threshold) {
             //print a success message
             var retval=0;
-            if (!window.travisCov.check(window._$blanket,{threshold: threshold})){
+            if (!window.travisCov.check( (window._$blanket || window._$jscoverage),{threshold: threshold})){
                     retval=1;
             }
             return retval;
-                    
+
     });
     phantom.exit(output > 0 ? 1 : 0);
 }
