@@ -36,13 +36,26 @@ function TrvsCov(runner) {
     var exists = fs.existsSync(path);
     if (exists){
         var userPkg = JSON.parse(fs.readFileSync(path, 'utf8'));
-        
-        if (userPkg && userPkg.scripts && userPkg.scripts[PACKAGE_KEY]){
-          var userOpts = userPkg.scripts[PACKAGE_KEY];
-          options.threshold = userOpts[THRESHOLD_KEY] || options.threshold;
-          options.global = userOpts[GLOBAL_KEY] || options.global;
-          options.local = userOpts[LOCAL_KEY] || options.local;
-          options.removeKey = userOpts[REMOVE_KEY];
+
+        if (userPkg){
+          var scripts = userPkg.scripts
+            , config = userPkg.config
+            , userOpts;
+
+
+          if (scripts && scripts[PACKAGE_KEY]){
+            console.warn(path + ": `scripts[\"travis-cov\"]` is deprecated. Please migrate to `config[\"travis-cov\"]`.\n");
+            userOpts = scripts[PACKAGE_KEY];
+          } else if (config && config[PACKAGE_KEY]){
+            userOpts = config[PACKAGE_KEY];
+          }
+
+          if (userOpts){
+            options.threshold = userOpts[THRESHOLD_KEY] || options.threshold;
+            options.global = userOpts[GLOBAL_KEY] || options.global;
+            options.local = userOpts[LOCAL_KEY] || options.local;
+            options.removeKey = userOpts[REMOVE_KEY];
+          }
         }
     }
     if (typeof options.removeKey != "undefined"){
@@ -63,7 +76,7 @@ function TrvsCov(runner) {
         , expected = err.expected
         , escape = true;
 
-      
+
       console.log(msg + stack);
     }
     process.exit(1);
