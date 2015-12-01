@@ -7,9 +7,7 @@ Threshold is specified in the "package.json" file of the consuming project.
 Add the key `travis-cov` to the `config` key in your "package.json" file.  Under that key, you can add any of the following properties:
 
 ```
-"threshold": <number>,
-"global": <boolean>,
-"local": <boolean>
+"threshold": <number>
 ```
 
 See [Blanket.js's "package.json"](https://github.com/alex-seville/blanket/blob/master/package.json#L64-L67) as an example.

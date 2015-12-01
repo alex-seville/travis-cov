@@ -2,8 +2,6 @@
 var fs = require("fs"),
     PACKAGE_KEY = "travis-cov",
     THRESHOLD_KEY = "threshold",
-    GLOBAL_KEY = "global",
-    LOCAL_KEY = "local",
     REMOVE_KEY = "removeKey",
     travisCov = require("./travisCov").travisCov;
 
@@ -52,8 +50,6 @@ function TrvsCov(runner) {
 
           if (userOpts){
             options.threshold = userOpts[THRESHOLD_KEY] || options.threshold;
-            options.global = userOpts[GLOBAL_KEY] || options.global;
-            options.local = userOpts[LOCAL_KEY] || options.local;
             options.removeKey = userOpts[REMOVE_KEY];
           }
         }
