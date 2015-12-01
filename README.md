@@ -12,6 +12,12 @@ local: <boolean>`
 
 See [Blanket.js's package.json](https://github.com/alex-seville/blanket/blob/master/package.json#L42) as an example.
 
+Alternatively, the desired threshold can be specified by setting its value in an environment variable named `TRAVIS_COV_THRESHOLD`. For example, to set the threshold to 75% from a UNIX-style shell:
+
+```shell
+TRAVIS_COV_THRESHOLD=75 mocha -R travis-cov
+```
+
 ###usage
 1. `npm install travis-cov`
 2. Use a reporter argument, `mocha -R travis-cov`
