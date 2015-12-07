@@ -1,5 +1,6 @@
 
 var fs = require("fs"),
+    path = require("path"),
     PACKAGE_KEY = "travis-cov",
     THRESHOLD_KEY = "threshold",
     GLOBAL_KEY = "global",
@@ -29,44 +30,54 @@ exports = module.exports =  TrvsCov;
 function TrvsCov(runner) {
   runner.on('end', function(){
     var cov = global._$jscoverage || {},
-      options = {};
+        options = {},
+        userOpts;
 
-    var path = process.cwd() + '/package.json';
+    var configPath = process.env.TRAVIS_COV_CONFIG;
+    if (configPath) {
+      configPath = path.resolve(configPath);
+      if (fs.existsSync(configPath)) {
+        userOpts = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+      }
+    }
 
-    var exists = fs.existsSync(path);
-    if (exists){
-        var userPkg = JSON.parse(fs.readFileSync(path, 'utf8'));
+    if (!userOpts) {
+      var pkgPath = path.resolve('package.json');
+      if (fs.existsSync(pkgPath)){
+        var userPkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 
         if (userPkg){
           var scripts = userPkg.scripts
-            , config = userPkg.config
-            , userOpts;
+            , config = userPkg.config;
 
 
           if (scripts && scripts[PACKAGE_KEY]){
-            console.warn(path + ": `scripts[\"travis-cov\"]` is deprecated. Please migrate to `config[\"travis-cov\"]`.\n");
+            console.warn(pkgPath + ': `scripts["travis-cov"]` is deprecated. Please migrate to `config["travis-cov"]`.\n');
             userOpts = scripts[PACKAGE_KEY];
           } else if (config && config[PACKAGE_KEY]){
             userOpts = config[PACKAGE_KEY];
           }
-
-          if (userOpts){
-            options.threshold = userOpts[THRESHOLD_KEY] || options.threshold;
-            options.global = userOpts[GLOBAL_KEY] || options.global;
-            options.local = userOpts[LOCAL_KEY] || options.local;
-            options.removeKey = userOpts[REMOVE_KEY];
-          }
         }
+      }
     }
-    if (typeof options.removeKey != "undefined"){
+
+    if (userOpts){
+      options.threshold = userOpts[THRESHOLD_KEY] || options.threshold;
+      options.global = userOpts[GLOBAL_KEY] || options.global;
+      options.local = userOpts[LOCAL_KEY] || options.local;
+      options.removeKey = userOpts[REMOVE_KEY];
+    }
+
+    if (typeof options.removeKey !== 'undefined'){
       //blanket specific
       delete cov[options.removeKey];
     }
+
     travisCov.check(cov,options);
   });
 
   runner.on('fail', function(test,err){
-    console.log("Tests failed.\n");
+    console.log('Tests failed.\n');
     if (err){
       var message = err.message || ''
         , stack = err.stack || message
