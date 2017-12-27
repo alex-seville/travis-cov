@@ -1,6 +1,6 @@
 ## travis-cov
 
-A coverage reporter for [Mocha](http://visionmedia.github.com/mocha/)/[Blanket](http://blanketjs.org/) that will fail a [travis-ci](https://travis-ci.org/) build when the coverage threshold is too low.
+A coverage reporter for [Mocha](http://mochajs.org/)/[Blanket](http://blanketjs.org/) that will fail a [travis-ci](https://travis-ci.org/) build when the coverage threshold is too low.
 
 Threshold is specified in the package.json file of the consuming project.
 
